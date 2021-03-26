@@ -3,18 +3,27 @@ import {
   assertEquals,
   assertThrows,
 } from "https://deno.land/std@0.91.0/testing/asserts.ts";
-import OptionalUtils from "./mod.ts";
+import {
+  isNone,
+  isSome,
+  okOr,
+  okOrElse,
+  or,
+  orElse,
+  unwrapOr,
+  unwrapOrElse,
+} from "./mod.ts";
 
 Deno.test("okOr returns passed value", () => {
   assertEquals(
-    OptionalUtils.okOr("value", new Error("error message")),
+    okOr("value", new Error("error message")),
     "value",
   );
 });
 
 Deno.test("okOr throws error if passed undefined", () => {
   assertThrows(
-    () => OptionalUtils.okOr<string>(undefined, new Error("error message")),
+    () => okOr<string>(undefined, new Error("error message")),
     Error,
     undefined,
     "error message",
@@ -23,7 +32,7 @@ Deno.test("okOr throws error if passed undefined", () => {
 
 Deno.test("okOr throws error if passed null", () => {
   assertThrows(
-    () => OptionalUtils.okOr<string>(null, new Error("error message")),
+    () => okOr<string>(null, new Error("error message")),
     Error,
     undefined,
     "error message",
@@ -32,7 +41,7 @@ Deno.test("okOr throws error if passed null", () => {
 
 Deno.test("okOrElse returns passed value", () => {
   assertEquals(
-    OptionalUtils.okOrElse("value", () => new Error("error message")),
+    okOrElse("value", () => new Error("error message")),
     "value",
   );
 });
@@ -40,7 +49,7 @@ Deno.test("okOrElse returns passed value", () => {
 Deno.test("okOrElse throws supplied error if passed undefined", () => {
   assertThrows(
     () =>
-      OptionalUtils.okOrElse<string>(
+      okOrElse<string>(
         undefined,
         () => new Error("error message"),
       ),
@@ -52,8 +61,7 @@ Deno.test("okOrElse throws supplied error if passed undefined", () => {
 
 Deno.test("okOrElse throws supplied error if passed null", () => {
   assertThrows(
-    () =>
-      OptionalUtils.okOrElse<string>(null, () => new Error("error message")),
+    () => okOrElse<string>(null, () => new Error("error message")),
     Error,
     undefined,
     "error message",
@@ -62,14 +70,14 @@ Deno.test("okOrElse throws supplied error if passed null", () => {
 
 Deno.test("or returns passed value", () => {
   assertEquals(
-    OptionalUtils.or("value", "defaultValue"),
+    or("value", "defaultValue"),
     "value",
   );
 });
 
 Deno.test("or returns default value if passed undefined", () => {
   assertEquals(
-    OptionalUtils.or<string>(
+    or<string>(
       undefined,
       "defaultValue",
     ),
@@ -79,28 +87,28 @@ Deno.test("or returns default value if passed undefined", () => {
 
 Deno.test("or returns default value if passed null", () => {
   assertEquals(
-    OptionalUtils.or<string>(null, "defaultValue"),
+    or<string>(null, "defaultValue"),
     "defaultValue",
   );
 });
 
 Deno.test("or default returned value can be undefined", () => {
   assertEquals(
-    OptionalUtils.or<string>(null, undefined),
+    or<string>(null, undefined),
     undefined,
   );
 });
 
 Deno.test("orElse returns passed value", () => {
   assertEquals(
-    OptionalUtils.orElse("value", () => "defaultValue"),
+    orElse("value", () => "defaultValue"),
     "value",
   );
 });
 
 Deno.test("orElse returns supplied default value if passed undefined", () => {
   assertEquals(
-    OptionalUtils.orElse<string>(
+    orElse<string>(
       undefined,
       () => "defaultValue",
     ),
@@ -110,28 +118,28 @@ Deno.test("orElse returns supplied default value if passed undefined", () => {
 
 Deno.test("orElse returns supplied default value if passed null", () => {
   assertEquals(
-    OptionalUtils.orElse<string>(null, () => "defaultValue"),
+    orElse<string>(null, () => "defaultValue"),
     "defaultValue",
   );
 });
 
 Deno.test("orElse supplied default returned value can be undefined", () => {
   assertEquals(
-    OptionalUtils.orElse<string>(null, () => undefined),
+    orElse<string>(null, () => undefined),
     undefined,
   );
 });
 
 Deno.test("unwrapOr returns passed value", () => {
   assertEquals(
-    OptionalUtils.unwrapOr("value", "defaultValue"),
+    unwrapOr("value", "defaultValue"),
     "value",
   );
 });
 
 Deno.test("unwrapOr returns default value if passed undefined", () => {
   assertEquals(
-    OptionalUtils.unwrapOr<string>(
+    unwrapOr<string>(
       undefined,
       "defaultValue",
     ),
@@ -141,21 +149,21 @@ Deno.test("unwrapOr returns default value if passed undefined", () => {
 
 Deno.test("unwrapOr returns default value if passed null", () => {
   assertEquals(
-    OptionalUtils.unwrapOr<string>(null, "defaultValue"),
+    unwrapOr<string>(null, "defaultValue"),
     "defaultValue",
   );
 });
 
 Deno.test("unwrapOrElse returns passed value", () => {
   assertEquals(
-    OptionalUtils.unwrapOrElse("value", () => "defaultValue"),
+    unwrapOrElse("value", () => "defaultValue"),
     "value",
   );
 });
 
 Deno.test("unwrapOrElse returns supplied default value if passed undefined", () => {
   assertEquals(
-    OptionalUtils.unwrapOrElse<string>(
+    unwrapOrElse<string>(
       undefined,
       () => "defaultValue",
     ),
@@ -165,43 +173,43 @@ Deno.test("unwrapOrElse returns supplied default value if passed undefined", () 
 
 Deno.test("unwrapOrElse returns supplied default value if passed null", () => {
   assertEquals(
-    OptionalUtils.unwrapOrElse<string>(null, () => "defaultValue"),
+    unwrapOrElse<string>(null, () => "defaultValue"),
     "defaultValue",
   );
 });
 
 Deno.test("isSome returns true if the value is defined and not null", () => {
   assert(
-    OptionalUtils.isSome<string>("value"),
+    isSome<string>("value"),
   );
 });
 
 Deno.test("isSome returns false if the value is undefined", () => {
   assert(
-    !OptionalUtils.isSome<string>(undefined),
+    !isSome<string>(undefined),
   );
 });
 
 Deno.test("isSome returns false if the value is null", () => {
   assert(
-    !OptionalUtils.isSome<string>(null),
+    !isSome<string>(null),
   );
 });
 
 Deno.test("isNone returns false if the value is defined and not null", () => {
   assert(
-    !OptionalUtils.isNone<string>("value"),
+    !isNone<string>("value"),
   );
 });
 
 Deno.test("isNone returns true if the value is undefined", () => {
   assert(
-    OptionalUtils.isNone<string>(undefined),
+    isNone<string>(undefined),
   );
 });
 
 Deno.test("isNone returns true if the value is null", () => {
   assert(
-    OptionalUtils.isNone<string>(null),
+    isNone<string>(null),
   );
 });
