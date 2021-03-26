@@ -58,6 +58,14 @@ export default class OptionalUtils {
       return f();
     }
   }
+
+  public static isSome<T>(value: T | unknown | null): boolean {
+    return value !== undefined && value !== null;
+  }
+
+  public static isNone<T>(value: T | unknown | null): boolean {
+    return !OptionalUtils.isSome(value);
+  }
 }
 
 interface ISupplier<T> {

@@ -1,4 +1,5 @@
 import {
+  assert,
   assertEquals,
   assertThrows,
 } from "https://deno.land/std@0.91.0/testing/asserts.ts";
@@ -166,5 +167,41 @@ Deno.test("unwrapOrElse returns supplied default value if passed null", () => {
   assertEquals(
     OptionalUtils.unwrapOrElse<string>(null, () => "defaultValue"),
     "defaultValue",
+  );
+});
+
+Deno.test("isSome returns true if the value is defined and not null", () => {
+  assert(
+    OptionalUtils.isSome<string>("value"),
+  );
+});
+
+Deno.test("isSome returns false if the value is undefined", () => {
+  assert(
+    !OptionalUtils.isSome<string>(undefined),
+  );
+});
+
+Deno.test("isSome returns false if the value is null", () => {
+  assert(
+    !OptionalUtils.isSome<string>(null),
+  );
+});
+
+Deno.test("isNone returns false if the value is defined and not null", () => {
+  assert(
+    !OptionalUtils.isNone<string>("value"),
+  );
+});
+
+Deno.test("isNone returns true if the value is undefined", () => {
+  assert(
+    OptionalUtils.isNone<string>(undefined),
+  );
+});
+
+Deno.test("isNone returns true if the value is null", () => {
+  assert(
+    OptionalUtils.isNone<string>(null),
   );
 });
